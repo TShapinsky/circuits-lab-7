@@ -3,14 +3,14 @@ import numpy as np
 
 s = smu.smu()
 
-v = np.linspace(-.4,.4,1000)
+v = np.linspace(-1,1,1000)
 
 measuring = "V"
 
-f = open("data/T1.{!s}.csv".format(measuring),'w')
+f = open("data/T5.{!s}.csv".format(measuring),'w')
 f.write("Vdm, {!s}\n".format(measuring))
 
-s.set_voltage(1,-.2)
+s.set_voltage(1,-1)
 s.autorange(1)
 s.set_current(2,0)
 s.autorange(2)
