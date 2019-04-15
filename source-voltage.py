@@ -51,8 +51,8 @@ ax = plt.subplot(111)
 
 # First, the ones with lower Vb
 for (color, V2, Vdm, V) in zip(['b','g','r'], V2s, Vdms, Vs[:3]):
-  ax.plot(Vdm, V, color + '.', markersize=1, label="V2 = %g" % V2)
-plt.title("Common source node voltage (Vb = %g)" % Vbs[0])
+  ax.plot(Vdm, V, color + '.', markersize=1, label="V2 = %g V" % V2)
+plt.title("Common source node voltage (Vb = %g V)" % Vbs[0])
 plt.xlabel("Differential voltage (V)")
 plt.ylabel("Common-source voltage (V)")
 plt.grid(True)
@@ -62,8 +62,8 @@ plt.cla()
 
 # Now higher Vb.  Reverse colors so they match
 for (color, V2, Vdm, V) in zip(['r','g','b'], V2s[3:], Vdms[3:], Vs[3:]):
-  ax.plot(Vdm, V, color + '.', markersize=1, label="V2 = %g" % V2)
-plt.title("Common source node voltage (Vb = %g)" % Vbs[3])
+  ax.plot(Vdm, V, color + '.', markersize=1, label="V2 = %g V" % V2)
+plt.title("Common source node voltage (Vb = %g V)" % Vbs[3])
 plt.xlabel("Differential voltage (V)")
 plt.ylabel("Common-source voltage (V)")
 plt.grid(True)
