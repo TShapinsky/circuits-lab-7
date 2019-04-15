@@ -67,21 +67,10 @@ for (Vdm, Idiff) in zip(Vdms, Idiffs):
 # Plot things
 fig = plt.figure(figsize=(8,6))
 ax = plt.subplot(111)
-
-"""
-for (Vb, V2, Vdm, Vt, Idiff, It, m, b) in zip(Vbs, V2s, Vdms, Vts, Idiffs, Its, ms, bs):
-  ax.plot(Vdm, Idiff, 'g.', markersize=2, label="Differential current")
-  ax.plot(Vt, It, 'r-', markersize=1, label="Theoretical fit (slope = %g ℧)" % m)
-  plt.title("Differential current (Vb = %g, V2 = %g)" % (Vb, V2))
-  plt.xlabel("Differential voltage (V)")
-  plt.ylabel("Differential current (A)")
-  ax.legend()
-  plt.savefig("sigmoid-%g-%g.pdf" % (Vb, V2))
-  plt.cla()
-"""
+colors = ['r','g','b','b','g','r']
 
 # First, the ones with lower Vb
-for (color, V2, Vdm, Vt, Idiff, It, m, b) in zip(['b','g','r'], V2s, Vdms[:3], Vts, Idiffs, Its, ms, bs):
+for (color, V2, Vdm, Vt, Idiff, It, m, b) in list(zip(colors, V2s, Vdms, Vts, Idiffs, Its, ms, bs))[:3]:
   ax.plot(Vdm, Idiff, color + '.', markersize=2, label="Differential current (V2 = %g)" % V2)
   ax.plot(Vt, It, color + '-', markersize=1, label="Theoretical fit (V2 = %g, slope = %g ℧)" % (V2, m))
 
@@ -90,4 +79,16 @@ plt.xlabel("Differential voltage (V)")
 plt.ylabel("Differential current (A)")
 ax.legend()
 plt.savefig("sigmoid-low-vb.pdf")
+plt.cla()
+
+# Next, the ones with higher Vb
+for (color, V2, Vdm, Vt, Idiff, It, m, b) in list(zip(colors, V2s, Vdms, Vts, Idiffs, Its, ms, bs))[3:]:
+  ax.plot(Vdm, Idiff, color + '.', markersize=2, label="Differential current (V2 = %g)" % V2)
+  ax.plot(Vt, It, color + '-', markersize=1, label="Theoretical fit (V2 = %g, slope = %g ℧)" % (V2, m))
+
+plt.title("Differential current (Vb = %g)" % Vbs[3])
+plt.xlabel("Differential voltage (V)")
+plt.ylabel("Differential current (A)")
+ax.legend()
+plt.savefig("sigmoid-high-vb.pdf")
 plt.cla()
