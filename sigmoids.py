@@ -13,6 +13,11 @@ def clip(xs, ys, xbounds, ybounds):
   out = list(zip(*pairs))
   return np.array(out[0]), np.array(out[1])
 
+def clipDomain(xs, ys, xbounds): # Useful if y-data is not numbers
+  pairs = [(x, y) for (x,y) in zip(xs, ys) if (xbounds[0] <= x) and (x <= xbounds[1])]
+  out = list(zip(*pairs))
+  return np.array(out[0]), np.array(out[1])
+
 
 # Info about trials
 Vbs = [.563, .563, .563, 1.076, 1.076, 1.076]
@@ -24,7 +29,7 @@ Vdms = [] #plural of Vdm
 I1s = []
 I2s = []
 
-for name in fileNames:
+for (i, name) in zip(range(6), fileNames):
   Vdm = []
   I1 = []
   I2 = []
@@ -34,14 +39,18 @@ for name in fileNames:
     for row in c:
       Vdm += [float(row[0])]
       I1 += [float(row[1])] 
-  Vdms += [Vdm]
-  I1s += [I1]
 
   with open(name[1]) as f:
     c = csv.reader(f, delimiter=",")
     next(c) # Throw away the header
     for row in c:
       I2 += [float(row[1])] 
+
+  # Vdm, Is = clipDomain(Vdm, zip(I1, I2), (-0.3,0.1) if i<3 else (-0.75, 0.5))
+  # I1, I2 = list(zip(*Is))
+
+  Vdms += [Vdm]
+  I1s += [I1]
   I2s += [I2]
 
 Idiffs = np.array(I1s) - np.array(I2s)
@@ -64,6 +73,9 @@ for (Vdm, Idiff) in zip(Vdms, Idiffs):
   Its += [It]
 
 
+for (V2, Vb, m, b) in zip(V2s, Vbs,  ms, bs):
+  print("V2 = %g, Vb= %g, m = %g, b = %g" % (V2, Vb, m, b))
+
 # Plot things
 fig = plt.figure(figsize=(8,6))
 ax = plt.subplot(111)
@@ -73,6 +85,7 @@ colors = ['r','g','b','b','g','r']
 for (color, V2, Vdm, Vt, Idiff, It, m, b) in list(zip(colors, V2s, Vdms, Vts, Idiffs, Its, ms, bs))[:3]:
   ax.plot(Vdm, Idiff, color + '.', markersize=2, label="Differential current (V2 = %g)" % V2)
   ax.plot(Vt, It, color + '-', markersize=1, label="Theoretical fit (V2 = %g, slope = %g ℧)" % (V2, m))
+
 
 plt.title("Differential current (Vb = %g)" % Vbs[0])
 plt.xlabel("Differential voltage (V)")
